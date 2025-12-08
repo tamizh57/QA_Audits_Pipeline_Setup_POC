@@ -1,0 +1,45 @@
+name: Java QA Audit
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  quality-audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Run Spotless Auto-format
+        run: mvn spotless:apply
+
+      - name: Run Full QA
+        run: mvn clean verify site
+
+      - name: Archive Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-reports
+          path: target/site
+
+      # Optional: Archive test and dependency-check reports too
+      - name: Archive Test Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: target/surefire-reports
+
+      - name: Archive Dependency-Check Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-reports
+          path: target/dependency-check-report.html
