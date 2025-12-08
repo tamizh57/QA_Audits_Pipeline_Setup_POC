@@ -23,7 +23,7 @@ jobs:
         run: mvn spotless:check
 
       - name: Run Full QA
-        run: mvn clean verify site -Pskip-owasp
+        run: mvn clean verify site -Ddependency-check.skip=true
 
       - name: Archive Reports
         uses: actions/upload-artifact@v4
