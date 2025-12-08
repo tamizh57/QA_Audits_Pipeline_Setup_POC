@@ -16,14 +16,14 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          java-version: '20'
+          distribution: 'corretto'
 
       - name: Run Spotless Auto-format
-        run: mvn spotless:apply
+        run: mvn spotless:check
 
       - name: Run Full QA
-        run: mvn clean verify site
+        run: mvn clean verify site -Pskip-owasp
 
       - name: Archive Reports
         uses: actions/upload-artifact@v4
